@@ -1,0 +1,23 @@
+markdown: kramdown
+highlighter: pygments
+permalink: blog/:year/:month/:day/:title.html
+paginate: 6
+paginate_path: page/:num
+
+blog:
+    name: haowai31                                       # 博客名称
+    description: none                                    # 博客描述
+    title: Readings                                      # 网页标题
+    url: http://haowai31.github.io/                      # 博客地址
+    duoshuo:                                             # 多说ID
+    tongji:                                              # 百度统计ID
+    qiniu:                                               # 七牛云地址
+author:
+    name: haowai31                                       # 作者名称
+    email: haowai31@126.com                              # 邮箱地址
+    weibo:                                               # 微博地址
+    github: https://haowai31.github.com/                 # GitHub地址
+    logo:                                                # logo地址
+    douban:
+        name:                                            # 豆瓣地址名称
+        key:                                             # 豆瓣API Key
