@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>RSS - haowai31</title>
-    <description>haowai31 - none</description>
+    <title>RSS - Thinking and Recording</title>
+    <description>Thinking and Recording - </description>
     <link>http://haowai31.github.io/</link>
     <atom:link href="http://haowai31.github.io//page/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 12 May 2015 19:52:04 +0800</pubDate>
-    <lastBuildDate>Tue, 12 May 2015 19:52:04 +0800</lastBuildDate>
+    <pubDate>Thu, 14 May 2015 11:23:04 +0800</pubDate>
+    <lastBuildDate>Thu, 14 May 2015 11:23:04 +0800</lastBuildDate>
     <generator>haowai31</generator>
     
       <item>
-        <title>hello</title>
-        <description>
+        <title>你好，旅行者～</title>
+        <description>&lt;p&gt;原本打算把之前进行的论文阅读报告记录一下，然而由于&lt;strong&gt;不可抗力&lt;/strong&gt;的原因，最终在github上搭了个博客来完成原来的目标。总之，尽量保持更新。&lt;/p&gt;
 </description>
         <pubDate>Tue, 12 May 2015 00:00:00 +0800</pubDate>
         <link>http://haowai31.github.io//blog/2015/05/12/hello.html</link>
         <guid isPermaLink="true">http://haowai31.github.io//blog/2015/05/12/hello.html</guid>
+        
+        <category>开始</category>
         
       </item>
     
