@@ -5,13 +5,14 @@
     <description>Thinking and Recording - </description>
     <link>http://haowai31.github.io/</link>
     <atom:link href="http://haowai31.github.io//page/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 14 May 2015 21:39:57 +0800</pubDate>
-    <lastBuildDate>Thu, 14 May 2015 21:39:57 +0800</lastBuildDate>
+    <pubDate>Wed, 20 May 2015 16:57:12 +0800</pubDate>
+    <lastBuildDate>Wed, 20 May 2015 16:57:12 +0800</lastBuildDate>
     <generator>haowai31</generator>
     
       <item>
         <title>NG机器学习的编程实验</title>
-        <description>&lt;p&gt;&lt;a href=&quot;#ex1&quot;&gt;实验一：线性回归&lt;/a&gt;&lt;/p&gt;
+        <description>&lt;p&gt;&lt;a href=&quot;#ex1&quot;&gt;实验一：线性回归&lt;/a&gt;
+&lt;a href=&quot;#ex2&quot;&gt;实验二：逻辑回归&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;今天把NG的机器学习公开课的作业又顺了一边，很多语句不用就忘了，另外矩阵运算用起来就是让人&lt;em&gt;心旷神怡&lt;/em&gt;。&lt;/p&gt;
 
@@ -72,7 +73,63 @@ X_norm = (X - repmat(mu, size(X,1) , 1))  ./ repmat(sigma,size(X,1),1);
 &lt;h3 id=&quot;section-3&quot;&gt;1.5 总结&lt;/h3&gt;
 &lt;p&gt;总之，第一次实验叫做 &lt;strong&gt;worm exercises&lt;/strong&gt; 也是有一定道理的。其实就是给 &lt;strong&gt;纸上得来&lt;/strong&gt; 和 &lt;strong&gt;恭行&lt;/strong&gt; 两件事建立个联系，知道这些算法是可以实现并且实际工作的，这对于我这样的笨蛋还是很重要的，学的时候总觉得隔层纱，到真的程序运行结果砸在脸上了，就能迷糊回来了。&lt;/p&gt;
 
-&lt;p&gt;（2015.05.14 21：28）&lt;/p&gt;
+&lt;p&gt;&lt;a name=&quot;ex2&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;logistic-regression&quot;&gt;实验二，Logistic Regression&lt;/h2&gt;
+
+&lt;p&gt;该实验总共包含两个小实验，一个是基础的逻辑回归实验，另一个是情况稍微复杂一点的实验，需要拟合的数据不是直线，当然其实如果没想那么多，跟着pdf做的话，几乎感觉不到区别，除了最后可视化的图不太一样。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;2.1 将数据可视化&lt;/h3&gt;
+
+&lt;p&gt;可以看到，边界线大概是条直线。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-5&quot;&gt;2.2 实现&lt;/h3&gt;
+
+&lt;p&gt;经过前面的实验熏陶，已经知道这个实验实现部分肯定包括CostFunction，下降率，自己对数据进行预测等等，所有需要做的就是照着公式用octave实现出来就可，再次强调 &lt;strong&gt;矩阵的行和列&lt;/strong&gt; 是验算式子写的对不对的有效的方法。
+sigmoid函数很简单，不过注意的是这个函数接受的参数z，是矩阵，所以使用操作符号的时候一定要注意，该用“./”就要用。
+求J的CostFunction，解析起来比较复杂，还是惯例，从里到外解析，注意运算符左右的矩阵的行和列，一般不会有什么问题，具体公式如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;J = 1 / m * sum((-y).*log(sigmoid(X*theta)) - (1-y).*log(1-sigmoid(X*theta)));
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;要注意的还是诸如“.*”这些操作符号。
+而相关的gradient更新的公式如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;grad = 1 / m * (X' * (sigmoid(X*theta) - y));
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;其实costfunction写完之后，需要修改的文件已经差不多没了，但是任务并没有结束，有了costfunction要如何更新theta呢？
+这里是使用了octave里面提供的fminunc函数，通过这个函数算出对于CostFunction来说最优的参数。使用方式如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;options = optimset('GradObj', 'on', 'MaxIter', 400);
+[theta, cost] = fminunc(@(t)(costFunction(t, X, y)), initial_theta, options);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;GradObj参数告诉fminunc使用gradient来计算需要返回theta和cost两个值，设置MaxIter最大步数为400。后面@(t)的写法是内部调用函数，同时提供theta和上文提到的options就可以等待fminunc算出结果了。并不用自己制定下降率之类的参数，大部分工作都由fminunc做了。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-6&quot;&gt;2.3 评估结果&lt;/h3&gt;
+
+&lt;p&gt;这里就是将已经得到的theta带进h函数就好，然后把所有的值在0.5以上的数据挑出来，将其y置1就好，使用find，很容易达到目的。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;tmp = sigmoid(X*theta);
+finde = find(tmp&amp;gt;=0.5);
+p(finde,1) = 1;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后就可以看到结果啦。&lt;/p&gt;
+
+&lt;h3 id=&quot;regularized-logistic-regression&quot;&gt;2.4 第二个实验：Regularized logistic regression&lt;/h3&gt;
+
+&lt;p&gt;整个流程和第一个实验差不多，需要注意的是costFunction中计算J函数和gradient更新，对于j=0和j&amp;gt;0是不一样的处理方式，另外在mapFeature函数中，使用了6次的多项式对数据进行拟合，可以看其拟合的手法，值得学习。
+最后还给出了过度拟合与拟合度不够的边界值的图，可以看看。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-7&quot;&gt;2.5 总结&lt;/h3&gt;
+
+&lt;p&gt;整体来说，大部分程序不需要自己动手，只是部分函数自己填一下就可以了，像填空一样，但是做到现在，应该慢慢对整个体系有一些印象，回来是需要自己把整个过程都写出来的，提前做准备。&lt;/p&gt;
+
+&lt;p&gt;实验一更新（2015.05.14 21：28）
+实验二更新（2015.05.20 09：50）&lt;/p&gt;
 </description>
         <pubDate>Thu, 14 May 2015 00:00:00 +0800</pubDate>
         <link>http://haowai31.github.io//blog/2015/05/14/ng_ex.html</link>
