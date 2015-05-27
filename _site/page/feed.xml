@@ -5,16 +5,15 @@
     <description>Thinking and Recording - </description>
     <link>http://haowai31.github.io/</link>
     <atom:link href="http://haowai31.github.io//page/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 20 May 2015 16:57:12 +0800</pubDate>
-    <lastBuildDate>Wed, 20 May 2015 16:57:12 +0800</lastBuildDate>
+    <pubDate>Wed, 27 May 2015 09:44:32 +0800</pubDate>
+    <lastBuildDate>Wed, 27 May 2015 09:44:32 +0800</lastBuildDate>
     <generator>haowai31</generator>
     
       <item>
         <title>NG机器学习的编程实验</title>
-        <description>&lt;p&gt;&lt;a href=&quot;#ex1&quot;&gt;实验一：线性回归&lt;/a&gt;
-&lt;a href=&quot;#ex2&quot;&gt;实验二：逻辑回归&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;今天把NG的机器学习公开课的作业又顺了一边，很多语句不用就忘了，另外矩阵运算用起来就是让人&lt;em&gt;心旷神怡&lt;/em&gt;。&lt;/p&gt;
+        <description>&lt;p&gt;&lt;a href=&quot;#ex1&quot;&gt;实验一：线性回归&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;#ex2&quot;&gt;实验二：逻辑回归&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;#ex3&quot;&gt;实验三：神经网络&lt;/a&gt;&lt;/p&gt;
 
 &lt;!-- more --&gt;
 
@@ -128,8 +127,38 @@ p(finde,1) = 1;
 
 &lt;p&gt;整体来说，大部分程序不需要自己动手，只是部分函数自己填一下就可以了，像填空一样，但是做到现在，应该慢慢对整个体系有一些印象，回来是需要自己把整个过程都写出来的，提前做准备。&lt;/p&gt;
 
-&lt;p&gt;实验一更新（2015.05.14 21：28）
-实验二更新（2015.05.20 09：50）&lt;/p&gt;
+&lt;p&gt;&lt;a name=&quot;ex3&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;section-8&quot;&gt;实验三，神经网络算法&lt;/h2&gt;
+
+&lt;p&gt;这个实验使用了视频最后讲的识别手写数字作为数据输入，分别使用了多种特征的逻辑回归算法与神经网络算法进行实验，用来加强这两种算法的对比。实际运行时也会有个大概的印象，在特征较多时&lt;strong&gt;神经网络算法果然比逻辑回归要快&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-9&quot;&gt;3.1 多重特征的逻辑回归算法&lt;/h3&gt;
+
+&lt;p&gt;这一小节就是对上一次实验的复习，如果上次实验costFunction和grad写的好的话，这次可以直接拿来用。但是果然还是再做一边比较好。
+然后调用fmincg函数，比之前用的fminunc在处理大规模数据方面更有效率。
+但是使用方法和fminunc几乎一样。
+然后根据前面训练出来的theta对手写数字进行预测，一切都差不多。需要注意的就是这里使用max函数，得出的是每行最大的值（越大越正确），需要用一个两列的矩阵接受max函数的返回值，这样，第一列返回的是最大值，第二列返回的是最大值所在的位置。第二列才是我们需要的。第几个最大，预测就是几。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-10&quot;&gt;3.2 神经网络算法&lt;/h3&gt;
+
+&lt;p&gt;所有的theta已经算好，而且模型也给出了，是一个具有一个hidden层的模型，hidden层具有25个单元，输出层有10个单元。
+那由于数据是有4000个特征的。所以可以预测theta1是25×401的矩阵，而theta2是10×26的矩阵。
+于是有了theta之后，就可以一层一层的进行计算了，每层记得加上x0。
+如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;tmpX = [ones(m,1) X];
+layer1 = sigmoid(tmpX * Theta1');
+tmplayer1 = [ones(m,1) layer1];
+layer2 = sigmoid(tmplayer1 * Theta2');
+[a,p] = max(layer2,[],2);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代码很简单，最后的max函数上面也讲过了，需要用一个两列的矩阵接受返回值，第二列就是我们的预测值。（他把10当作0了）&lt;/p&gt;
+
+&lt;p&gt;实验一更新（2015.05.14 21：28）&lt;br /&gt;
+实验二更新（2015.05.20 09：50）&lt;br /&gt;
+实验三更新（2015.05.27 09：23）&lt;/p&gt;
 </description>
         <pubDate>Thu, 14 May 2015 00:00:00 +0800</pubDate>
         <link>http://haowai31.github.io//blog/2015/05/14/ng_ex.html</link>
