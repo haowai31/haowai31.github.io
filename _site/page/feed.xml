@@ -5,15 +5,16 @@
     <description>Thinking and Recording - </description>
     <link>http://haowai31.github.io/</link>
     <atom:link href="http://haowai31.github.io//page/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 27 May 2015 09:44:32 +0800</pubDate>
-    <lastBuildDate>Wed, 27 May 2015 09:44:32 +0800</lastBuildDate>
+    <pubDate>Tue, 09 Jun 2015 09:53:27 +0800</pubDate>
+    <lastBuildDate>Tue, 09 Jun 2015 09:53:27 +0800</lastBuildDate>
     <generator>haowai31</generator>
     
       <item>
         <title>NG机器学习的编程实验</title>
         <description>&lt;p&gt;&lt;a href=&quot;#ex1&quot;&gt;实验一：线性回归&lt;/a&gt;&lt;br /&gt;
 &lt;a href=&quot;#ex2&quot;&gt;实验二：逻辑回归&lt;/a&gt;&lt;br /&gt;
-&lt;a href=&quot;#ex3&quot;&gt;实验三：神经网络&lt;/a&gt;&lt;/p&gt;
+&lt;a href=&quot;#ex3&quot;&gt;实验三：神经网络&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;#ex4&quot;&gt;实验四：神经网络反向传播算法&lt;/a&gt;&lt;/p&gt;
 
 &lt;!-- more --&gt;
 
@@ -156,9 +157,74 @@ layer2 = sigmoid(tmplayer1 * Theta2');
 
 &lt;p&gt;代码很简单，最后的max函数上面也讲过了，需要用一个两列的矩阵接受返回值，第二列就是我们的预测值。（他把10当作0了）&lt;/p&gt;
 
+&lt;p&gt;&lt;a name=&quot;ex4&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;section-11&quot;&gt;实验四 神经网络与反向传播算法&lt;/h2&gt;
+
+&lt;p&gt;本次实验主要实现了包括反向传播算法在内的比较完整的神经网络学习算法，由于这个算法比较复杂，实现起来步骤也比较多，所以经常容易出错，甚至这个算法后面还花了很大的篇幅给了一个校验算法，可能都觉得这算法偷摸在后台跑着很不让程序员放心。
+本次实验将神经网络学习算法分为了两个部分，第一是前向传播，这部分和上个实验的相关部分相近，神经网络模型也是三层，Theta1是25 × 401，Theta2是10 × 26。在之后写代码的时候会经常遇到。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-12&quot;&gt;4.1 前向算法的实现&lt;/h3&gt;
+
+&lt;p&gt;具体步骤和实验三类似，但是需要注意的是，这里输出层包含了十个单元，但是给出的y只是1-10的数字，需要将y转成位图存储，具体代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Y = [];
+E = eye(num_labels);
+for i=1:num_labels
+	Y0 = find(y==i);
+	Y(Y0,:) = repmat(E(i,:),size(Y0,1),1);
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;主要用了find函数与repmat函数，find函数前面有介绍，而repmat函数就是重复矩阵，所以这里又要说了，矩阵运算赛高～～&lt;/p&gt;
+
+&lt;p&gt;这里的costFunction看起来非常复杂，需要算有三个求和符号的式子，而且就算是向量算式仍然还有两个求和符号，善用sum求和函数即可，复杂但是不难。对了，记得加上正则化的参数。&lt;/p&gt;
+
+&lt;p&gt;learning部分，包括梯度导数都将在下一节介绍。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-13&quot;&gt;4.2 后向传播算法的实现&lt;/h3&gt;
+&lt;p&gt;这一次实验的重点来了，梯度导数算起来步骤繁多，还是善用解构的方法，现处理和别的联系不大的模块，官方给的pdf也是先要处理sigmoid导数计算的小模块，pdf中已经给出了导数的式子，没事儿可以自己求个导～
+将随机初始化处理了之后，就开始本次实验的重头戏，后向传播算法。官方pdf中显然也是非常不放心将步骤这么多的一个算法交给我们这些小朋友，所以步骤都给清楚了，而我在做的时候，也是老老实实重新看了一边视频，将重点重新复习了一下才开始动笔写的。好了严格按照步骤写就好。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;step 1&lt;/strong&gt;&lt;br /&gt;
+求a1，我们知道a1就是X中某一个样本特征，但是记得加上bias。由于要算偏差值和delta，所以需要再进行一边前向传播，分别算出a2，a3，z2，z3。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;step 2&lt;/strong&gt;&lt;br /&gt;
+算偏差值，err3单独算，然后按照给的公式一步一步算出err2就好。这里给出err2的计算式子。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;err_2 = (Theta2' * err_3);
+err_2 = err_2(2:end) .* sigmoidGradient(z_2);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里切记切记，z2是25 × 1，而err2是26 × 1，需要将bias干掉再算，当然如果在写代码的时候时刻记着现在矩阵计算的行和列，那就不会像我一样犯错误了。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;step 3&lt;/strong&gt;&lt;br /&gt;
+计算delta1和delta2。按照公式计算即可。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;delta_2 = delta_2 + (err_3)*a_2';
+delta_1 = delta_1 + (err_2)*a_1';
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;step 4&lt;/strong&gt;
+计算两个梯度导数，还是一样按照公式计算即可。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Theta1_grad = 1 / m * delta_1 + lambda / m * theta1_tmp;
+Theta2_grad = 1 / m * delta_2 + lambda / m * theta2_tmp;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;其实按照步骤分解，每一步视频都讲的挺清楚，注意代码编写正确即可。&lt;/p&gt;
+
+&lt;p&gt;之后官方已经给了校验算法，自己跑一遍ex4就行。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-14&quot;&gt;4.3 关于隐藏层的可视化&lt;/h3&gt;
+
+&lt;p&gt;这个额外的实验就一个问题：隐藏层究竟代表了什么？
+其实咱们小时候学习的时候也是这样，学写字，大概长这个样子就是什么字儿，大概是这个样子是什么句子（还记得那个文字顺序一点儿都不影响阅读么？）。原来在看名家在争论白马非马的时候就跟着思考过这个概念，就是&lt;strong&gt;大概长这个样子&lt;/strong&gt;用不是人话描述就叫模型，所谓马为天下之马而白马就这一匹而已。之所以这个算法叫神经网络算法，其实也是这样，每一个中间层可能就是对某一类事物的模型，每层递进的过程中都在一点儿一点儿完善这个模型。&lt;/p&gt;
+
 &lt;p&gt;实验一更新（2015.05.14 21：28）&lt;br /&gt;
 实验二更新（2015.05.20 09：50）&lt;br /&gt;
-实验三更新（2015.05.27 09：23）&lt;/p&gt;
+实验三更新（2015.05.27 09：23）&lt;br /&gt;
+实验四更新（2015.06.09 09：09）&lt;/p&gt;
 </description>
         <pubDate>Thu, 14 May 2015 00:00:00 +0800</pubDate>
         <link>http://haowai31.github.io//blog/2015/05/14/ng_ex.html</link>
