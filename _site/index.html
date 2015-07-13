@@ -60,6 +60,32 @@
 <div class="posts">
   <section class="post">
     <header class="post-header">
+      <h1 class="post-title"><a href="/blog/2015/07/13/usbmuxd.html">usbmuxd服务及应用</a></h1>
+      <p class="post-meta">
+        <i class="fa fa-calendar"></i>
+        2015年07月13日
+        <i class="space"></i>
+        <i class="fa fa-tags"></i>
+        <a class="post-category" href="/page/category.html#"></a>
+      </p>
+    </header>
+    <div class="post-main">
+      <p>今天在装iPhone上的LLDB+debugserver的时候，wifi突然抽风，非常慢，致使在主机进行lldb远程调试的时候过了好多分钟才能打开远程的app，等待的过程中我查了一下资料，发现也有一些人是遇到了这些情况，他们是通过usbmuxd服务进行解决的。迫不及待，实验了一番。</p>
+
+<p>后面查到这个usbmuxd服务，将USB通信抽象为TCP通信，也就是说实现了基于USB驱动之上的TCP连接，回想iTunes和Xcode应该也都用了这个技术，从而可以使用USB连接。</p>
+
+<p><a href="https://github.com/libimobiledevice/libimobiledevice">libimobiledevice</a>整合了usbmuxd服务，并在此基础上实现了一些特殊的功能，早期的越狱都是通过这个库进行操作的，同样也可以利用该库+ifuse进行远程访问控制手机等等。（而且是在非越狱的情况下）</p>
+
+<p>如果说上面这个库还很理论化的话，<a href="https://github.com/rsms/peertalk">peerTalk</a>，依然也是一个基于usbmuxd服务的项目，而且该项目封装的很好，非常容易参考，从而完成自己的开发。而且这中间只是用到的私有的协议，并没有用到私有API，应该还是可以上架的。</p>
+
+      <div class="readall"><a href="/blog/2015/07/13/usbmuxd.html" id="post-readall">阅读全文&nbsp;<i class="fa fa-chevron-right"></i></a></div>
+    </div>
+  </section>
+</div>
+
+<div class="posts">
+  <section class="post">
+    <header class="post-header">
       <h1 class="post-title"><a href="/blog/2015/06/15/methods_of_protocols_analysis.html">安全协议读书笔记（二）：安全协议的三大理论分析方法</a></h1>
       <p class="post-meta">
         <i class="fa fa-calendar"></i>

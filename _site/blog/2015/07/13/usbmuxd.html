@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <meta name="description" content="Readings">
   <meta name="author" content="haowai31">
-  <meta name="keywords" content="安全协议读书笔记（二）：安全协议的三大理论分析方法, Thinking and Recording, haowai31">
-  <title>安全协议读书笔记（二）：安全协议的三大理论分析方法 - Thinking and Recording</title>
-  <link rel="canonical" href="http://haowai31.github.io//blog/2015/06/15/methods_of_protocols_analysis.html">
+  <meta name="keywords" content="usbmuxd服务及应用, Thinking and Recording, haowai31">
+  <title>usbmuxd服务及应用 - Thinking and Recording</title>
+  <link rel="canonical" href="http://haowai31.github.io//blog/2015/07/13/usbmuxd.html">
   <link rel="icon" href="/res/img/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="/res/img/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/res/css/public.css">
@@ -57,53 +57,23 @@
 
     <div class="main">
     <header class="post-header">
-  <h1 class="post-title"><a href="/blog/2015/06/15/methods_of_protocols_analysis.html">安全协议读书笔记（二）：安全协议的三大理论分析方法</a></h2>
+  <h1 class="post-title"><a href="/blog/2015/07/13/usbmuxd.html">usbmuxd服务及应用</a></h2>
   <p class="post-meta">
     <i class="fa fa-calendar"></i>
-    2015年06月15日
+    2015年07月13日
     <i class="space"></i>
     <i class="fa fa-tags"></i>
-    <a class="post-category" href="/page/category.html#安全协议">安全协议</a>	
+    <a class="post-category" href="/page/category.html#"></a>	
   </p>
 </header>
 <div class="post-main">
-<p>安全协议的安全性分析包括理论分析、设计分析、检测分析和经验分析等多种方法。但是理论分析依靠严格的理论验证，使得安全协议可以获得比较高的安全性。
-<!-- more --></p>
+<p>今天在装iPhone上的LLDB+debugserver的时候，wifi突然抽风，非常慢，致使在主机进行lldb远程调试的时候过了好多分钟才能打开远程的app，等待的过程中我查了一下资料，发现也有一些人是遇到了这些情况，他们是通过usbmuxd服务进行解决的。迫不及待，实验了一番。</p>
 
-<h2 id="section">安全多方计算</h2>
+<p>后面查到这个usbmuxd服务，将USB通信抽象为TCP通信，也就是说实现了基于USB驱动之上的TCP连接，回想iTunes和Xcode应该也都用了这个技术，从而可以使用USB连接。</p>
 
-<p>安全多方计算是姚期智在1982年提出的一个概念。之后Glodreich、Micali和Wigderson给出了一般性描述。
-目前安全多方计算主要的成果在以下四个方面：</p>
+<p><a href="https://github.com/libimobiledevice/libimobiledevice">libimobiledevice</a>整合了usbmuxd服务，并在此基础上实现了一些特殊的功能，早期的越狱都是通过这个库进行操作的，同样也可以利用该库+ifuse进行远程访问控制手机等等。（而且是在非越狱的情况下）</p>
 
-<ol>
-  <li>澄清分布式计算的一些基本安全性问题。</li>
-  <li>说明在既定的安全模型下，哪些分布式计算功能可以安全实现，哪些不能。</li>
-  <li>给出设计分布式安全协议的一般技术和方法。</li>
-  <li>设计可以应用的分布式计算的安全方案和模块。</li>
-</ol>
-
-<p>到目前位置，理论上任何安全多方计算问题都可以通过普通计算来解决，但是效率比较低。所以设计一个一般性的解决方案很不实用。如何针对特殊情况提出特定的解决方案，如何能使得部署解决方案快速、有效的部署，并能方便的进行二次开发与定制，是现在安全多方计算的一个重要的研究方向。</p>
-
-<h2 id="section-1">安全协议的形式化分析方法</h2>
-
-<p>这是一种标准的方法，使得所有协议均有可能被证伪，但是参考哥德尔定理，并不能保证能证明，只是可以检查协议符合既定的安全目标。因此形式化协议分析有助于：(1)准确的描述协议的行为；(2)准确的描述出协议的安全特性；(3)证明安全协议满足既定安全目标，以及证明协议在什么条件下不满足既定的安全目标。</p>
-
-<p>发展过程分为四个阶段。</p>
-
-<ol>
-  <li>早期阶段，这一阶段主要是针对具体的协议进行研究。最早提出形式化分析思想的Needham和Schroeder，为密钥共享和公钥认证服务器系统建立了安全协议。</li>
-  <li>形式化分析初级阶段，以Dolev-Yao的工作为标志。使用BAN类逻辑，CKT5等基于知识逻辑的有效逻辑进行验证。</li>
-  <li>转折阶段。G. Lowe的论文《关于Needham-Schroeder公钥协议的一个攻击》，使得各方开始研究使用一般用途的模型检测方法应用与协议分析。</li>
-  <li>理论证明阶段。Fabrega、Herzog和Guttman的串空间（Strand Space）理论，以及Paulson的归纳方法为代表。</li>
-</ol>
-
-<h2 id="section-2">安全协议的可证明安全性理论</h2>
-
-<p>到现在为止，大多数安全协议的现状是，设计出来之后进行一些测试，然后该协议自应用之后很长一段时间都没有被破译，那就具有公认的安全性。如果发现了其中的安全漏洞，在进行少量改动之后，继续进行应用，直到具有公认的安全性。
-这个过程，在计算机的各个领域都出现过这种原始而初级的阶段，跟闹着玩儿似的，但是由于完成比完美重要的多，所以先做个能用的是大多数计算机技术人员最常用的选择。
-而可证明安全性理论，指的是这么一种归纳的方法：确定安全目标，构建攻击者模型，对某个元操作（Atomic Primitives，比如DES加密算法，某个数学难题等等）的特定协议，然后基于以上形式化模型分析。换句话说对所有的安全协议分析到到最后都会被归纳到对元操作的安全性分析。
-可知，可证明安全性理论本质是一种公理化的研究方法。具体我理解也不够深入，这儿给出几个概念，如果感兴趣可以继续查：最初的思想阐述由Goldwasser、Micali和Rivest在20世纪80年代完成，由于效率问题20世纪90年代中出现“面向实际的可证明安全性（Practive-Oriented Provable-Security）”，Bellare和Rogaway提出的随机预言（Random Oracle，RO）模型方法论。RO是一个转折点，之后大量的有效的方案纷纷出现，同时产生了另一个概念：“具体安全性（Contrete Security or Exact Security）”。目前为止，几乎所有的国际安全标准体系都要求至少提供在RO模型中可证明的安全性设计。而现在可证明安全性的方案大都基于RO模型。</p>
-
+<p>如果说上面这个库还很理论化的话，<a href="https://github.com/rsms/peertalk">peerTalk</a>，依然也是一个基于usbmuxd服务的项目，而且该项目封装的很好，非常容易参考，从而完成自己的开发。而且这中间只是用到的私有的协议，并没有用到私有API，应该还是可以上架的。</p>
 
 </div>
 <div class="share">
@@ -116,16 +86,16 @@
 </div>
 <div class="pagination">
 
-<a class="pagination-item newer" href="/blog/2015/06/11/Security_Protocols.html"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;安全协议读书笔记（一）</a>
+<a class="pagination-item newer" href="/blog/2015/06/15/methods_of_protocols_analysis.html"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;安全协议读书笔记（二）：安全协议的三大理论分析方法</a>
 
 
-<a class="pagination-item older" href="/blog/2015/07/13/usbmuxd.html">usbmuxd服务及应用&nbsp;&nbsp;<i class="fa fa-arrow-right"></i></a>
+<span class="pagination-item older">下一篇&nbsp;<i class="fa fa-chain-broken"></i></span>
 
 </div>
 <style>#ds-reset .ds-avatar, #ds-reset .ds-avatar img{border-radius:50%;}</style>
 <script type="text/javascript">var duoshuoQuery = {short_name:"11780753"};(function(){var ds = document.createElement('script');ds.type = 'text/javascript';ds.async = true;ds.src = '/res/js/embed.js';ds.charset = 'UTF-8';(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);})();</script>
 <div class="comments">
-  <div class="ds-thread" data-title="安全协议读书笔记（二）：安全协议的三大理论分析方法" data-thread-key="/blog/2015/06/15/methods_of_protocols_analysis" data-url="http://haowai31.github.io//blog/2015/06/15/methods_of_protocols_analysis.html"></div>
+  <div class="ds-thread" data-title="usbmuxd服务及应用" data-thread-key="/blog/2015/07/13/usbmuxd" data-url="http://haowai31.github.io//blog/2015/07/13/usbmuxd.html"></div>
 </div>
     <footer>Copyright&nbsp;&copy;&nbsp;2015 <a href="http://haowai31.github.io/">Thinking and Recording</a><br/><i class="fa fa-cogs" style="color:blueviolet;">&nbsp;</i>Powered by <a href="http://jekyllrb.com/" target="_blank">Jekyll</a></footer>
     </div>
