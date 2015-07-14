@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <meta name="description" content="Readings">
   <meta name="author" content="haowai31">
-  <meta name="keywords" content="文章分类, Thinking and Recording, haowai31">
-  <title>文章分类 - Thinking and Recording</title>
-  <link rel="canonical" href="http://haowai31.github.io//page/category.html">
+  <meta name="keywords" content="iOS安全实验记录（一）：搭建环境与所需工具, Thinking and Recording, haowai31">
+  <title>iOS安全实验记录（一）：搭建环境与所需工具 - Thinking and Recording</title>
+  <link rel="canonical" href="http://haowai31.github.io//blog/2015/07/14/iossecurity1.html">
   <link rel="icon" href="/res/img/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="/res/img/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/res/css/public.css">
@@ -56,60 +56,86 @@
 </div>
 
     <div class="main">
-    <link rel="stylesheet" href="/res/css/page.css">
+    <header class="post-header">
+  <h1 class="post-title"><a href="/blog/2015/07/14/iossecurity1.html">iOS安全实验记录（一）：搭建环境与所需工具</a></h2>
+  <p class="post-meta">
+    <i class="fa fa-calendar"></i>
+    2015年07月14日
+    <i class="space"></i>
+    <i class="fa fa-tags"></i>
+    <a class="post-category" href="/page/category.html#ios安全">ios安全</a>	
+  </p>
+</header>
+<div class="post-main">
+<p>会持续更新iOS相关的安全实验，具体多少更不清楚，有好的主题就继续往下做，包括但不限于以下几个方面（这是已经做过和很感兴趣的）：</p>
+
+<ol>
+  <li>逆向某些App。</li>
+  <li>Hook与注入实验。</li>
+  <li>ROP攻击实验。</li>
+  <li>越狱开发。</li>
+</ol>
+
+<p>有兴趣探讨实验或提供实验主题请联系<strong>qinsky31@gmail.com</strong>。</p>
+
+<!-- more -->
+
+<p>今天，主要讲一下我这里搭建的环境，以及使用工具。</p>
+
+<h3 id="theos">Theos</h3>
+<p>这是一款越狱开发的工具包，与iOSOpenDev不同，这个工具包并不那么的<strong>完善</strong>，而逆向工程中很多东西无法自动化，所以使用这个不怎么完善的工具包可以方便对整个逆向的过程理解更加清晰明确。</p>
+
+<h3 id="ldid">ldid</h3>
+<p>签名用，在MAC上放一个也可以，在iPhone上放一个也可以。</p>
+
+<h3 id="cydiasubstrate">CydiaSubstrate</h3>
+<p>著名的越狱开发的基础包，主要提供了三种功能，使用简单方便：Hook，Loader，Safemode。Hook和Loader都不陌生，可以对目标进程进行Hook和注入。Safemode是CydiaSubstrate引入的专为越狱开发而做的，因为Loader使用的dylib载入第三方lib的，如果第三方lib（也就是自己的lib）出错的话，会让被注入的进程崩溃。而这个safemode可以识别SIGTRAP、SIGABRT、SIGILL、SIGBUS、SIGSEGV、SIGSYS六个信号，一旦被触发就进入safemode，禁用所有第三方lib，方便调试。</p>
+
+<h3 id="cycript">Cycript</h3>
+<p>一个可以进行运行在MTerminal的脚本语言，很方便的就注入进程，查看某函数的运行结果，某个中间结果都非常方便。</p>
+
+<h3 id="lldbdebugserver">LLDB和debugserver</h3>
+<p>由于笔者研究方向与LLVM相关，所以老老实实的用lldb进行调试了。</p>
+
+<h3 id="openssh">OpenSSH</h3>
+<p>方便手机远程调试。</p>
+
+<h3 id="usbmuxd">usbmuxd</h3>
+<p>一个将USB协议抽象成为TCP协议的服务，可以使用USB插口进行调试。</p>
+
+<h3 id="mterminal">MTerminal</h3>
+<p>iOS上的终端。</p>
+
+<h3 id="syslogd">syslogd</h3>
+<p>记录系统日志。进行越狱开发的时候syslog是不可或缺的帮手。</p>
+
+<h3 id="otool">otool</h3>
+<p>不用安装，可以查看程序依赖的动态库。</p>
 
 
-<h2 class="category">分类</h2>
-<div class="category-box">
-  <ul>
-    
-    
-    <li class="category-box-sub"><a href="#ios安全">ios安全&nbsp;<sup>2</sup></a></li>
-    
-    
-    <li class="category-box-sub"><a href="#安全协议">安全协议&nbsp;<sup>2</sup></a></li>
-    
-    
-    <li class="category-box-sub"><a href="#开始">开始&nbsp;<sup>1</sup></a></li>
-    
-    
-    <li class="category-box-sub"><a href="#机器学习">机器学习&nbsp;<sup>1</sup></a></li>
-    
-  </ul>
 </div>
-<hr id="line"/>
+<div class="share">
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+  </div>
+  <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":["qzone","tsina","weixin","sqq"],"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/res/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+</div>
+<div class="pagination">
+
+<a class="pagination-item newer" href="/blog/2015/07/13/usbmuxd.html"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;usbmuxd服务及应用</a>
 
 
-<h2 class="category" id="ios安全">ios安全</h2>
+<span class="pagination-item older">下一篇&nbsp;<i class="fa fa-chain-broken"></i></span>
 
-<ul><li class="category-sub">2015-07-14&nbsp;&nbsp;&raquo;&nbsp;&nbsp;<a class="category-sub-title" href="/blog/2015/07/14/iossecurity1.html">iOS安全实验记录（一）：搭建环境与所需工具</a></li></ul>
-
-<ul><li class="category-sub">2015-07-13&nbsp;&nbsp;&raquo;&nbsp;&nbsp;<a class="category-sub-title" href="/blog/2015/07/13/usbmuxd.html">usbmuxd服务及应用</a></li></ul>
-
-
-
-<h2 class="category" id="安全协议">安全协议</h2>
-
-<ul><li class="category-sub">2015-06-15&nbsp;&nbsp;&raquo;&nbsp;&nbsp;<a class="category-sub-title" href="/blog/2015/06/15/methods_of_protocols_analysis.html">安全协议读书笔记（二）：安全协议的三大理论分析方法</a></li></ul>
-
-<ul><li class="category-sub">2015-06-11&nbsp;&nbsp;&raquo;&nbsp;&nbsp;<a class="category-sub-title" href="/blog/2015/06/11/Security_Protocols.html">安全协议读书笔记（一）</a></li></ul>
-
-
-
-<h2 class="category" id="开始">开始</h2>
-
-<ul><li class="category-sub">2015-05-12&nbsp;&nbsp;&raquo;&nbsp;&nbsp;<a class="category-sub-title" href="/blog/2015/05/12/hello.html">你好，旅行者～</a></li></ul>
-
-
-
-<h2 class="category" id="机器学习">机器学习</h2>
-
-<ul><li class="category-sub">2015-05-14&nbsp;&nbsp;&raquo;&nbsp;&nbsp;<a class="category-sub-title" href="/blog/2015/05/14/ng_ex.html">NG机器学习的编程实验</a></li></ul>
-
-
-<br/><br/>
-
-    
+</div>
+<style>#ds-reset .ds-avatar, #ds-reset .ds-avatar img{border-radius:50%;}</style>
+<script type="text/javascript">var duoshuoQuery = {short_name:"11780753"};(function(){var ds = document.createElement('script');ds.type = 'text/javascript';ds.async = true;ds.src = '/res/js/embed.js';ds.charset = 'UTF-8';(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);})();</script>
+<div class="comments">
+  <div class="ds-thread" data-title="iOS安全实验记录（一）：搭建环境与所需工具" data-thread-key="/blog/2015/07/14/iossecurity1" data-url="http://haowai31.github.io//blog/2015/07/14/iossecurity1.html"></div>
+</div>
+    <footer>Copyright&nbsp;&copy;&nbsp;2015 <a href="http://haowai31.github.io/">Thinking and Recording</a><br/><i class="fa fa-cogs" style="color:blueviolet;">&nbsp;</i>Powered by <a href="http://jekyllrb.com/" target="_blank">Jekyll</a></footer>
     </div>
   </div>    
   <div id="top"><a id="rocket" href="javascript:;" title="返回顶部"><i></i></a></div>
