@@ -5,8 +5,8 @@
     <description>Thinking and Recording - </description>
     <link>http://haowai31.github.io/</link>
     <atom:link href="http://haowai31.github.io//page/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 14 Jul 2015 18:50:45 +0800</pubDate>
-    <lastBuildDate>Tue, 14 Jul 2015 18:50:45 +0800</lastBuildDate>
+    <pubDate>Tue, 14 Jul 2015 22:46:00 +0800</pubDate>
+    <lastBuildDate>Tue, 14 Jul 2015 22:46:00 +0800</lastBuildDate>
     <generator>haowai31</generator>
     
       <item>
@@ -56,6 +56,30 @@
 &lt;h3 id=&quot;otool&quot;&gt;otool&lt;/h3&gt;
 &lt;p&gt;不用安装，可以查看程序依赖的动态库。&lt;/p&gt;
 
+&lt;h2 id=&quot;hello-world&quot;&gt;Hello World&lt;/h2&gt;
+&lt;p&gt;按照惯例，写一个helloworld的程序，放在手机里执行作为开始。要在MAC上编译一个可以在iOS上执行的C程序，需要编译器，也需要指定SDK，下面分别进行介绍。&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;编译器&lt;/h3&gt;
+&lt;p&gt;原来交叉编译环境都是arm-开头，中间应该有关键字llvm-gcc，我找了半天，毛都没有，后面去Xcode更新日志上看到，从Xcode开始编译器都指定为clang，不再使用llvm-gcc，这一头包。后来在StackOverflow上面找到了一种方法，就是执行命令：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;xcrun -f --sdk iphoneos clang
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;xcrun是Xcode中command line tool的工具，这个命令可以找到Xcode使用的sdk包的地址。而iphoneos则是指定的平台，这样就找到了clang的位置。不过，这里clang是一个通用的编译器，需要指定平台和SDK包才行。&lt;/p&gt;
+
+&lt;h3 id=&quot;sdk&quot;&gt;SDK&lt;/h3&gt;
+&lt;p&gt;SDK包的位置倒是好找一点，直接find搜所有的SDKs找到相应SDK的位置即可。我要在iPhone执行我的helloworld，那么就选iPhone的SDK，这里SDK的版本是8.4。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;编译&lt;/h3&gt;
+&lt;p&gt;运行命令：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;clang --target=arm64-apple-darwin14.4.0 -isysroot $SDKs
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这中间target是指定平台，这里我用的iPhone6p，所以平台是arm64，isysroot指定的是SDK的文件，这里是我自己设的变量，需要改成自己的目录。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;运行&lt;/h3&gt;
+&lt;p&gt;通过命令scp放在手机上，用ldid签名然后就可以运行了。&lt;/p&gt;
 </description>
         <pubDate>Tue, 14 Jul 2015 00:00:00 +0800</pubDate>
         <link>http://haowai31.github.io//blog/2015/07/14/iossecurity1.html</link>
