@@ -17,4 +17,4 @@ title: 个人介绍
 5. 杂项
 
 ---
-有问题请联系：<haowai31@126.com>
+有问题请联系：<qinsky31@gmail.com>
