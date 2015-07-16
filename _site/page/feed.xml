@@ -5,8 +5,8 @@
     <description>Thinking and Recording - </description>
     <link>http://haowai31.github.io/</link>
     <atom:link href="http://haowai31.github.io//page/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 16 Jul 2015 21:36:35 +0800</pubDate>
-    <lastBuildDate>Thu, 16 Jul 2015 21:36:35 +0800</lastBuildDate>
+    <pubDate>Thu, 16 Jul 2015 21:38:14 +0800</pubDate>
+    <lastBuildDate>Thu, 16 Jul 2015 21:38:14 +0800</lastBuildDate>
     <generator>haowai31</generator>
     
       <item>
@@ -16,6 +16,8 @@
 &lt;p&gt;github地址为：https://github.com/jburnim/crest&lt;/p&gt;
 
 &lt;p&gt;下面是安装步骤和test的测试。&lt;/p&gt;
+
+&lt;!-- more --&gt;
 
 &lt;h3 id=&quot;section&quot;&gt;安装环境&lt;/h3&gt;
 &lt;p&gt;Ubuntu 14.04 32bit&lt;br /&gt;
