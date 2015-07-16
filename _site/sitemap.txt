@@ -1,4 +1,5 @@
 
+http://haowai31.github.io//page/2/index.html
 http://haowai31.github.io//page/timing.html
 http://haowai31.github.io//sitemap.txt
 http://haowai31.github.io//page/read.html
@@ -8,6 +9,7 @@ http://haowai31.github.io//page/category.html
 http://haowai31.github.io//page/about.html
 http://haowai31.github.io//404.html
 
+http://haowai31.github.io//blog/2015/07/16/crest.html
 http://haowai31.github.io//blog/2015/07/14/iossecurity1.html
 http://haowai31.github.io//blog/2015/07/13/usbmuxd.html
 http://haowai31.github.io//blog/2015/06/15/methods_of_protocols_analysis.html

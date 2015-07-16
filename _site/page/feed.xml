@@ -5,9 +5,71 @@
     <description>Thinking and Recording - </description>
     <link>http://haowai31.github.io/</link>
     <atom:link href="http://haowai31.github.io//page/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 14 Jul 2015 23:02:28 +0800</pubDate>
-    <lastBuildDate>Tue, 14 Jul 2015 23:02:28 +0800</lastBuildDate>
+    <pubDate>Thu, 16 Jul 2015 21:36:35 +0800</pubDate>
+    <lastBuildDate>Thu, 16 Jul 2015 21:36:35 +0800</lastBuildDate>
     <generator>haowai31</generator>
+    
+      <item>
+        <title>crest的安装与使用</title>
+        <description>&lt;p&gt;crest是一款针对C语言的自动测试工具，支持深度优先（DFS）、控制流图（CFG）、一致随机（uniform random）和随机分支（random branch）四种搜索策略，使用符号执行技术，使用Yices作为约束求解器进行求解。&lt;/p&gt;
+
+&lt;p&gt;github地址为：https://github.com/jburnim/crest&lt;/p&gt;
+
+&lt;p&gt;下面是安装步骤和test的测试。&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;安装环境&lt;/h3&gt;
+&lt;p&gt;Ubuntu 14.04 32bit&lt;br /&gt;
+Crest 0.1.2&lt;br /&gt;
+Yices 1.0.40&lt;br /&gt;
+Ocaml 3.12.1&lt;/p&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;安装步骤&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;安装Cmaml：由于Crest需要CIL的支持，而CIL需要Ocaml的支持，所以先安装Ocaml，在googlegroup中作者说Ocaml 4.01.0可以bugfree，否则CIL可能会停止响应，但是我直接用的Ubuntu的apt-get，安装的3.12.1，运行起来也没啥问题。&lt;/li&gt;
+  &lt;li&gt;安装Yices，这个版本是特别古老的版本，Yices官网都已经给的是Yices2了，但是也提供老版本的下载，只是没有源码了，只有编译好的binary，自己按需下载，依赖包这种东西，错一个版本几乎就不能用，我不信邪，装了Yices2，结果。。我还是用了Yices1.0.40。之后按照Crest的要求，把crest/src/Makefile Yices的目录更新一下，方便编译。&lt;/li&gt;
+  &lt;li&gt;安装CIL：依赖包都安装完了，现在开始安装Crest，但是之前，要先安装CIL，去Crest/CIL/目录configure一下，看看缺什么包自己安装就好了，不过一般都是ocaml-find和libgmp-dev两个包。configure通过之后再make就好了。&lt;/li&gt;
+  &lt;li&gt;安装Crest：去Crest/src/目录下，make即可完成安装。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;test&quot;&gt;test实验&lt;/h3&gt;
+&lt;p&gt;github上面给了一个test的运行例子，我也就是照着做了一遍，大概流程如下：
+首先，测试的C程序是test目录下的uniform_test.c，关键代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;if (a == 5) {
+	if (b == 19) {
+		if (c == 7) {
+			if (d == 4) {
+				fprintf(stderr, &quot;GOAL!\n&quot;);
+			}
+		}
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以看到，如果约数求解成功，应该有八个分支，并且其中一个分支应该输出“GOAL！”。然后把程序改装一下，需要进行一些代码插桩，比如将变量利用CREST的函数声明，然后输出的时候使用stderr进行输出，这样就可以看到例子了。这些事情test的代码都已经做好，具体可以看看test是怎么做的。然后使用bin目录下的crest对代码进行插桩和编译工作。使用run_crest运行已经插桩好的二进制文件，可以得出如下输出：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Iteration 0 (0s): covered 0 branches [0 reach funs, 0 reach branches].
+Iteration 1 (0s): covered 1 branches [1 reach funs, 8 reach branches].
+Iteration 2 (0s): covered 3 branches [1 reach funs, 8 reach branches].
+Iteration 3 (0s): covered 5 branches [1 reach funs, 8 reach branches].
+Iteration 4 (0s): covered 7 branches [1 reach funs, 8 reach branches].
+GOAL!
+Iteration 5 (0s): covered 8 branches [1 reach funs, 8 reach branches].
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以看到，已经得出了8个分支，而且也输出了“GOAL！”。任务算是完成了吧。&lt;/p&gt;
+
+&lt;p&gt;PS：这仅仅是对单个C文件的测试，据作者说还可以测试工程，等回来再行实验。&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 16 Jul 2015 00:00:00 +0800</pubDate>
+        <link>http://haowai31.github.io//blog/2015/07/16/crest.html</link>
+        <guid isPermaLink="true">http://haowai31.github.io//blog/2015/07/16/crest.html</guid>
+        
+        <category>程序分析</category>
+        
+      </item>
     
       <item>
         <title>iOS安全实验记录（一）：搭建环境与所需工具</title>

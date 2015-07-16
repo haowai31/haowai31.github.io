@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <meta name="description" content="Readings">
   <meta name="author" content="haowai31">
-  <meta name="keywords" content="文章分类, Thinking and Recording, haowai31">
-  <title>文章分类 - Thinking and Recording</title>
-  <link rel="canonical" href="http://haowai31.github.io//page/category.html">
+  <meta name="keywords" content="crest的安装与使用, Thinking and Recording, haowai31">
+  <title>crest的安装与使用 - Thinking and Recording</title>
+  <link rel="canonical" href="http://haowai31.github.io//blog/2015/07/16/crest.html">
   <link rel="icon" href="/res/img/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="/res/img/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/res/css/public.css">
@@ -56,69 +56,92 @@
 </div>
 
     <div class="main">
-    <link rel="stylesheet" href="/res/css/page.css">
+    <header class="post-header">
+  <h1 class="post-title"><a href="/blog/2015/07/16/crest.html">crest的安装与使用</a></h2>
+  <p class="post-meta">
+    <i class="fa fa-calendar"></i>
+    2015年07月16日
+    <i class="space"></i>
+    <i class="fa fa-tags"></i>
+    <a class="post-category" href="/page/category.html#程序分析">程序分析</a>	
+  </p>
+</header>
+<div class="post-main">
+<p>crest是一款针对C语言的自动测试工具，支持深度优先（DFS）、控制流图（CFG）、一致随机（uniform random）和随机分支（random branch）四种搜索策略，使用符号执行技术，使用Yices作为约束求解器进行求解。</p>
+
+<p>github地址为：https://github.com/jburnim/crest</p>
+
+<p>下面是安装步骤和test的测试。</p>
+
+<h3 id="section">安装环境</h3>
+<p>Ubuntu 14.04 32bit<br />
+Crest 0.1.2<br />
+Yices 1.0.40<br />
+Ocaml 3.12.1</p>
+
+<h3 id="section-1">安装步骤</h3>
+
+<ol>
+  <li>安装Cmaml：由于Crest需要CIL的支持，而CIL需要Ocaml的支持，所以先安装Ocaml，在googlegroup中作者说Ocaml 4.01.0可以bugfree，否则CIL可能会停止响应，但是我直接用的Ubuntu的apt-get，安装的3.12.1，运行起来也没啥问题。</li>
+  <li>安装Yices，这个版本是特别古老的版本，Yices官网都已经给的是Yices2了，但是也提供老版本的下载，只是没有源码了，只有编译好的binary，自己按需下载，依赖包这种东西，错一个版本几乎就不能用，我不信邪，装了Yices2，结果。。我还是用了Yices1.0.40。之后按照Crest的要求，把crest/src/Makefile Yices的目录更新一下，方便编译。</li>
+  <li>安装CIL：依赖包都安装完了，现在开始安装Crest，但是之前，要先安装CIL，去Crest/CIL/目录configure一下，看看缺什么包自己安装就好了，不过一般都是ocaml-find和libgmp-dev两个包。configure通过之后再make就好了。</li>
+  <li>安装Crest：去Crest/src/目录下，make即可完成安装。</li>
+</ol>
+
+<h3 id="test">test实验</h3>
+<p>github上面给了一个test的运行例子，我也就是照着做了一遍，大概流程如下：
+首先，测试的C程序是test目录下的uniform_test.c，关键代码如下：</p>
+
+<pre><code>if (a == 5) {
+	if (b == 19) {
+		if (c == 7) {
+			if (d == 4) {
+				fprintf(stderr, "GOAL!\n");
+			}
+		}
+	}
+}
+</code></pre>
+
+<p>可以看到，如果约数求解成功，应该有八个分支，并且其中一个分支应该输出“GOAL！”。然后把程序改装一下，需要进行一些代码插桩，比如将变量利用CREST的函数声明，然后输出的时候使用stderr进行输出，这样就可以看到例子了。这些事情test的代码都已经做好，具体可以看看test是怎么做的。然后使用bin目录下的crest对代码进行插桩和编译工作。使用run_crest运行已经插桩好的二进制文件，可以得出如下输出：</p>
+
+<pre><code>Iteration 0 (0s): covered 0 branches [0 reach funs, 0 reach branches].
+Iteration 1 (0s): covered 1 branches [1 reach funs, 8 reach branches].
+Iteration 2 (0s): covered 3 branches [1 reach funs, 8 reach branches].
+Iteration 3 (0s): covered 5 branches [1 reach funs, 8 reach branches].
+Iteration 4 (0s): covered 7 branches [1 reach funs, 8 reach branches].
+GOAL!
+Iteration 5 (0s): covered 8 branches [1 reach funs, 8 reach branches].
+</code></pre>
+
+<p>可以看到，已经得出了8个分支，而且也输出了“GOAL！”。任务算是完成了吧。</p>
+
+<p>PS：这仅仅是对单个C文件的测试，据作者说还可以测试工程，等回来再行实验。</p>
 
 
-<h2 class="category">分类</h2>
-<div class="category-box">
-  <ul>
-    
-    
-    <li class="category-box-sub"><a href="#ios安全">ios安全&nbsp;<sup>2</sup></a></li>
-    
-    
-    <li class="category-box-sub"><a href="#安全协议">安全协议&nbsp;<sup>2</sup></a></li>
-    
-    
-    <li class="category-box-sub"><a href="#开始">开始&nbsp;<sup>1</sup></a></li>
-    
-    
-    <li class="category-box-sub"><a href="#机器学习">机器学习&nbsp;<sup>1</sup></a></li>
-    
-    
-    <li class="category-box-sub"><a href="#程序分析">程序分析&nbsp;<sup>1</sup></a></li>
-    
-  </ul>
 </div>
-<hr id="line"/>
+<div class="share">
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+  </div>
+  <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":["qzone","tsina","weixin","sqq"],"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/res/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+</div>
+<div class="pagination">
+
+<a class="pagination-item newer" href="/blog/2015/07/14/iossecurity1.html"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;iOS安全实验记录（一）：搭建环境与所需工具</a>
 
 
-<h2 class="category" id="ios安全">ios安全</h2>
+<span class="pagination-item older">下一篇&nbsp;<i class="fa fa-chain-broken"></i></span>
 
-<ul><li class="category-sub">2015-07-14&nbsp;&nbsp;&raquo;&nbsp;&nbsp;<a class="category-sub-title" href="/blog/2015/07/14/iossecurity1.html">iOS安全实验记录（一）：搭建环境与所需工具</a></li></ul>
-
-<ul><li class="category-sub">2015-07-13&nbsp;&nbsp;&raquo;&nbsp;&nbsp;<a class="category-sub-title" href="/blog/2015/07/13/usbmuxd.html">usbmuxd服务及应用</a></li></ul>
-
-
-
-<h2 class="category" id="安全协议">安全协议</h2>
-
-<ul><li class="category-sub">2015-06-15&nbsp;&nbsp;&raquo;&nbsp;&nbsp;<a class="category-sub-title" href="/blog/2015/06/15/methods_of_protocols_analysis.html">安全协议读书笔记（二）：安全协议的三大理论分析方法</a></li></ul>
-
-<ul><li class="category-sub">2015-06-11&nbsp;&nbsp;&raquo;&nbsp;&nbsp;<a class="category-sub-title" href="/blog/2015/06/11/Security_Protocols.html">安全协议读书笔记（一）</a></li></ul>
-
-
-
-<h2 class="category" id="开始">开始</h2>
-
-<ul><li class="category-sub">2015-05-12&nbsp;&nbsp;&raquo;&nbsp;&nbsp;<a class="category-sub-title" href="/blog/2015/05/12/hello.html">你好，旅行者～</a></li></ul>
-
-
-
-<h2 class="category" id="机器学习">机器学习</h2>
-
-<ul><li class="category-sub">2015-05-14&nbsp;&nbsp;&raquo;&nbsp;&nbsp;<a class="category-sub-title" href="/blog/2015/05/14/ng_ex.html">NG机器学习的编程实验</a></li></ul>
-
-
-
-<h2 class="category" id="程序分析">程序分析</h2>
-
-<ul><li class="category-sub">2015-07-16&nbsp;&nbsp;&raquo;&nbsp;&nbsp;<a class="category-sub-title" href="/blog/2015/07/16/crest.html">crest的安装与使用</a></li></ul>
-
-
-<br/><br/>
-
-    
+</div>
+<style>#ds-reset .ds-avatar, #ds-reset .ds-avatar img{border-radius:50%;}</style>
+<script type="text/javascript">var duoshuoQuery = {short_name:"11780753"};(function(){var ds = document.createElement('script');ds.type = 'text/javascript';ds.async = true;ds.src = '/res/js/embed.js';ds.charset = 'UTF-8';(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);})();</script>
+<div class="comments">
+  <div class="ds-thread" data-title="crest的安装与使用" data-thread-key="/blog/2015/07/16/crest" data-url="http://haowai31.github.io//blog/2015/07/16/crest.html"></div>
+</div>
+    <footer>Copyright&nbsp;&copy;&nbsp;2015 <a href="http://haowai31.github.io/">Thinking and Recording</a><br/><i class="fa fa-cogs" style="color:blueviolet;">&nbsp;</i>Powered by <a href="http://jekyllrb.com/" target="_blank">Jekyll</a></footer>
     </div>
   </div>    
   <div id="top"><a id="rocket" href="javascript:;" title="返回顶部"><i></i></a></div>
