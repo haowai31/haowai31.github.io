@@ -1,0 +1,235 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="description" content="Readings">
+  <meta name="author" content="haowai31">
+  <meta name="keywords" content="CLANG、LLVM实验（一）, Thinking and Recording, haowai31">
+  <title>CLANG、LLVM实验（一） - Thinking and Recording</title>
+  <link rel="canonical" href="http://haowai31.github.io//blog/2015/07/24/llvm.html">
+  <link rel="icon" href="/res/img/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="/res/img/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/res/css/public.css">
+  <link rel="stylesheet" href="/res/css/light.css">
+  <script src="/res/js/light.js"></script>
+  <script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+</head>
+<body>
+  <div id="blog">
+    <div class="sidebar">
+<!--  <div class="profilepic">
+    <a href="/"><img src="" alt="logo"></img></a>
+  </div> -->
+  <h1 class="title"><a href="/">Thinking and Recording</a></h1>
+  <h2 class="sub-title"></h2>
+  <nav id="nav">
+    <ul>
+    
+      <li><a href="/page/timing.html"><i class="fa fa-clock-o"></i>&nbsp;时间轴</a></li>
+    
+      <li><a href="/page/category.html"><i class="fa fa-tags"></i>&nbsp;分类</a></li>
+    
+      <li><a href="/page/read.html"><i class="fa fa-book"></i>&nbsp;阅读</a></li>
+    
+      <li><a href="/page/about.html"><i class="fa fa-paper-plane-o"></i>&nbsp;关于</a></li>
+    
+    </ul>
+  </nav>  
+  <nav id="sub-nav">
+    <a class="weibo " href="" title="新浪微博" target="_blank"><i class="fa fa-weibo"></i></a>
+    <a class="github" href="https://haowai31.github.com/" title="GitHub" target="_blank"><i class="fa fa-github fa-2x"></i></a>
+    <a class="rss" href="/page/feed.xml" title="RSS订阅" target="_blank"><i class="fa fa-rss"></i></a>
+  </nav>
+  <div id="license">
+    <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" target="_blank" title="本站所有作品采用：&#10;知识共享《署名 非商业性使用 相同方式共享 3.0》&#10;进行许可" >
+    <img alt="License" height="31" width="88" src="data:image/png;base64,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" /></a>
+  </div>
+</div>
+
+    <div class="main">
+    <header class="post-header">
+  <h1 class="post-title"><a href="/blog/2015/07/24/llvm.html">CLANG、LLVM实验（一）</a></h2>
+  <p class="post-meta">
+    <i class="fa fa-calendar"></i>
+    2015年07月24日
+    <i class="space"></i>
+    <i class="fa fa-tags"></i>
+    <a class="post-category" href="/page/category.html#llvm">llvm</a>	
+  </p>
+</header>
+<div class="post-main">
+<p>由于项目需要，研究了一段时间的LLVM，现将已经做过的实验总结如下。<br />
+实验环境：
+Clang 3.2
+LLVM 3.2
+Ubuntu 14.04 64bit
+<!-- more --></p>
+
+<h3 id="part-1-">Part 1 基础</h3>
+<p>CLANG是编译器前端，LLVM是编译器后端，这是一个典型的现代编译器的模型，通过中间语言分割，使得前端和后端分别只做自己的事情。
+首先按照官网的get start进行编译和安装，因为是使用cmake进行编译的，方便各个studio进行整合和编辑，比如Xcode，Visual Stdio等。
+然后对目录熟悉一下，为了使编译不污染源代码，所以build和source分离。
+在安装的过程中可以知道clang是作为一个llvm的tool放进去的。现对常用目录总结如下：</p>
+
+<pre><code>source:
+./example/
+	BrainF, ExceptionDemo, Fibonacci, HowToUseJIT, Kaleidoscope, ModuleMaker, Ocaml-Kaleidoscope，这是LLVM给的样例程序
+./test/：LLVM有健全的自测。
+./tools/
+	clang, llvm-*，包括了clang和以llvm开头的工具，包括llvm-dis等等常用命令
+		./clang/
+			./examples/：在clang的目录中也有这么几个examples，之后会有其中名叫PrintFunctionName的样例分析
+			./lib/：里面有各种clang的工具，可以发现很多在clang前端跑的词法分析和语法分析的lib都在这里面。
+./lib/：LLVM的lib，包括LLVM自己写的pass都在这里面，可以说是非常详尽的代码库。PASS开发就靠这儿了。
+</code></pre>
+
+<h3 id="part-2-clang">Part 2 Clang的一个例子</h3>
+<p>在tools/clang/examples/下有几个clang前端的关于词法分析和语法分析的例子，都是基于AST抽象语法树进行操作的，下面将对于一个叫做PrintFunctionNames的例子进行分析。
+首先得编译运行该例子。如果在编译LLVM时，make进行的缺省值的编译，那么examples是并不会被编译的，在tools/clang/目录下使用如下命令进行编译。</p>
+
+<pre><code>make BUILD_EXAMPLES=1
+</code></pre>
+
+<p>然后就会看到在build/lib/目录下生成了名为PrintFunctionNames的so文件，该文件就是一个使用抽象语法树进行一定功能的插件。使用如下运行。</p>
+
+<pre><code>clang -cc1 -I $C_INCLUDE_PATH -load $BUILD/lib/PrintFunctionNames.so -plugin print-fns hello.c
+</code></pre>
+
+<p>下面分别解释一下都是什么意思。-cc1是只用clang的前端进行词法分析与语法分析，并不调用后端进行编译。-I是制定include目录，因为这里是使用源码编译并且没有配置环境变量，需要制定include目录。-load就是所有clang的插件编译完之后生成的so文件。-plugin是告诉clang准备制定参数运行插件，换句话讲，-plugin之后的参数是传给插件的，最后是待分析的文件名。</p>
+
+<p>由于hello.c并未给出，所以这里也不提供运行结果，不过大概应该是给了很多很多函数的名称，这里的函数名称是在遍历AST的时候挨个输出出来的。
+下面将分析该样例的代码，看看该插件如何实现了上述功能。</p>
+
+<p><a href="https://github.com/llvm-mirror/clang/blob/master/examples/PrintFunctionNames/PrintFunctionNames.cpp">源代码地址</a></p>
+
+<p>这是一个C++的源码，可以看到该类是继承自<strong>ASTConsumer</strong>，并且重写了函数HandleTopLevelDecl，然后没遇到一个函数，就调用getNameAsString()将该函数流送给了llvm::errs()。llvm::errs()是在运行之后的输出流，如果自己写插件都可以往这里面输出。</p>
+
+<p>然后另一个类继承自PluginASTAction，这是一个包装好的插件的AST的类，具体如何遍历下次深入分析。最后将该前端插件进行绑定，然后设置该插件的参数命令如下：</p>
+
+<pre><code>X("print-fns", "print function names");
+</code></pre>
+
+<p>所以可以看到，之前我们运行的命令print-fns就是在这儿被绑定的。</p>
+
+<h3 id="part-3-example">Part 3 写一个自己example</h3>
+<p>其实这个example我也是参照着有一版的LLVM提供的BoostASTConsumer的前端插件进行重写的，但是因为对遍历AST的类重新进行了封装，所以没了，为了进行单独编译，我就想在example目录里面放这个插件，然后编译之后生成so文件就可以用了。
+具体如下，将包括Makefile的BoostASTConsumer目录放在source/tools/clang/examples/下，然后修改tools/clang/目录下的CMakeList.txt，添加：</p>
+
+<pre><code>add_subdirectory(BoostConASTConsumer)
+</code></pre>
+
+<p>在最后一行，进行保存。
+然后在build/目录下重新CMake，更新一下build目录中的cmakelist，然后在build/tools/clang/下进行</p>
+
+<pre><code>make BUILD_EXAMPLES=1
+</code></pre>
+
+<p>即可重新编译。
+这其中BoostConASTConsumer目录除了要有一个cpp文件之外，仍然要有一个exports文件，一个Makefile文件，一个Cmake文件，这仨我都是照着别的example写的。</p>
+
+<p>下面说一下这个插件的cpp文件。
+这里我继承了两个类，<strong>ASTConsumer</strong>和<strong>RecursiveASTVisitor</strong>类，第一个类已经提到过，第二个类是一个利用深度优先遍历AST树的类。
+然后重写了函数VisitFunctionDecl()，遇到一个函数就把函数对象保存起来并计数，最后在定义的函数PrintStats()中，将所有遍历AST中遇到的函数输出出来即可。</p>
+
+<h3 id="part-4-pass">Part 4 PASS</h3>
+<p>Pass在LLVM中起到很重要的作用，首先明确Pass的处理目标是中间语言，也就是.bc和.ll文件，不过ll是给人看的，Pass处理的都是bc。还是这样，首先运行一个pass验验货。
+使用pass大概都如下所示的命令。</p>
+
+<pre><code>opt -load $LIB/*.so -plugin XXXX &lt;*.bc&gt; /dev/null
+</code></pre>
+
+<p>同样，load和plugin的用法与clang类似，而使用&lt;&gt;来载入bc文件，最后执行。如果是编译到llvm内部的插件，有更加简便的方式执行，如下所示。</p>
+
+<pre><code>opt -XXXX &lt;*.bc&gt; /dev/null
+</code></pre>
+
+<p>那个-XXXX就是LLVM自带的插件，我经常使用的插件如下所示：</p>
+
+<pre><code>-dot-callgraph
+-dot-cfg
+-dot-cfg-only
+	这三个插件都是生成一个dot文件，用来画图，其中加only的是不带函数体，只有函数的定义和名称，而另外两个不加only的会将函数体即body生成在dot文件里面。PS：dot文件可以用，Graphviz软件进行图形化表示，具体用法就是dot filename -Tpng -o *.png，然后就生成了一个png的图。
+-lops
+	该插件是我在做混淆的时候参考着用的，可以识别natural loop。
+-print-cfg
+-print-callgraph
+-print-callgraph-sccs
+-print-cfg-sccs
+	这四个是用来输出cfg和callgraph的，其中sccs是图的最大连通分量，在进行优化的时候很有意义。
+-print-dom-info
+	控制点的信息，求控制点在进行优化时很有意义，包括基于控制节点的分析等等。
+-print-function
+-print-module
+	顾名思义。
+-indvars
+	规范递归变量。做三个改变，1）将所有循环变量变成从0开始步长为1的循环。2）将循环变量确定为PHI node。3）所有的指针引用都用一个连续的数组引用表示。我一个将简单的数据合并为复杂的数据结构的混淆就是基于这个pass进行编写的。
+-jump-thread
+	遍历所有block，如果能证明某block的前驱可以确定的指向某一个判断条件分支，那么直接将该前驱和该前驱一定指向的后继连在一起。我另外一个基于不透明谓词的混淆就是用来抵抗这种优化的，事实证明符号执行+约束求解都证明不出来某个前驱一定指向某个后继。
+-loop-extract
+	将一个循环提出来，形成一个新的函数。我第三个混淆的方法就是基于该pass，按照我的证明某种类型的block的表达式树可以被提出来形成新的函数。
+-loop-reduce
+-loop-rotate
+-loop-simplify
+	有关loop的插件非常重要，内部提供的源代码写的很优美，而且值得借鉴。
+-simplifycfg
+	优化cfg，删除不必要的block
+-extract-block
+	抽取block
+-view-dom
+-view-postdom
+	等等查看控制节点的。
+</code></pre>
+
+<p>以上～这是我常用的llvm的插件，可以看到功能还是够实现很多想法的。而且因为LLVM的模块化，所以可以进行单独编译执行。
+具体可以参考LLVM官方<a href="http://llvm.org/docs/Passes.html">PASS列表</a></p>
+
+<h3 id="part-5-pass">Part 5 写一个pass</h3>
+<p>本教程完全实现自LLVM官方给的<a href="http://llvm.org/docs/WritingAnLLVMPass.html">Writing a pass</a>
+不知道是不是错觉，好像PASS比CLANG的插件好写的样子，代码就是上面这个网页提供的hello例子。
+老规矩，先验验货。</p>
+
+<pre><code>opt -load %Build/lib/LLVMHello.so -plugin hello &lt;hello.bc&gt; /dev/null
+</code></pre>
+
+<p>可以看到也是把函数名给输出出来了。具体可以参考各个pass的例子进行改写。
+另外，如果一个插件不会用，可以将-plugin改成-help，就可以获得帮助文档啦～LLVM真方便。</p>
+
+
+</div>
+<div class="share">
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+  </div>
+  <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":["qzone","tsina","weixin","sqq"],"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/res/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+</div>
+<div class="pagination">
+
+<a class="pagination-item newer" href="/blog/2015/07/16/crest.html"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;crest的安装与使用</a>
+
+
+<span class="pagination-item older">下一篇&nbsp;<i class="fa fa-chain-broken"></i></span>
+
+</div>
+<style>#ds-reset .ds-avatar, #ds-reset .ds-avatar img{border-radius:50%;}</style>
+<script type="text/javascript">var duoshuoQuery = {short_name:"11780753"};(function(){var ds = document.createElement('script');ds.type = 'text/javascript';ds.async = true;ds.src = '/res/js/embed.js';ds.charset = 'UTF-8';(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);})();</script>
+<div class="comments">
+  <div class="ds-thread" data-title="CLANG、LLVM实验（一）" data-thread-key="/blog/2015/07/24/llvm" data-url="http://haowai31.github.io//blog/2015/07/24/llvm.html"></div>
+</div>
+    <footer>Copyright&nbsp;&copy;&nbsp;2015 <a href="http://haowai31.github.io/">Thinking and Recording</a><br/><i class="fa fa-cogs" style="color:blueviolet;">&nbsp;</i>Powered by <a href="http://jekyllrb.com/" target="_blank">Jekyll</a></footer>
+    </div>
+  </div>    
+  <div id="top"><a id="rocket" href="javascript:;" title="返回顶部"><i></i></a></div>
+  
+</body>
+</html>
