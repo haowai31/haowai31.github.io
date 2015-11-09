@@ -5,15 +5,15 @@
     <description>Thinking and Recording - </description>
     <link>http://haowai31.github.io/</link>
     <atom:link href="http://haowai31.github.io//page/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 09 Nov 2015 10:50:45 +0800</pubDate>
-    <lastBuildDate>Mon, 09 Nov 2015 10:50:45 +0800</lastBuildDate>
+    <pubDate>Mon, 09 Nov 2015 17:27:28 +0800</pubDate>
+    <lastBuildDate>Mon, 09 Nov 2015 17:27:28 +0800</lastBuildDate>
     <generator>haowai31</generator>
     
       <item>
         <title>KLEE平台搭建与实验</title>
-        <description>&lt;p&gt;由于项目的需要，研究了一段时间符号执行的平台KLEE，由于我的主要工作是在LLVM中间语言上的，而KLEE的工作也是建立在LLVM上的，所以KLEE就成为做实验的重要工具。&lt;/p&gt;
-
-&lt;h3 id=&quot;klee-&quot;&gt;KLEE 简单介绍&lt;/h3&gt;
+        <description>&lt;p&gt;由于项目的需要，研究了一段时间符号执行的平台KLEE，由于我的主要工作是在LLVM中间语言上的，而KLEE的工作也是建立在LLVM上的，所以KLEE就成为做实验的重要工具。
+&lt;!-- more --&gt;
+### KLEE 简单介绍 ###&lt;/p&gt;
 
 &lt;p&gt;KLEE是一个建立在EXE平台的基础上的一个符号执行平台，由斯坦福大学开发，使用STP作为约束求解器，依靠着在约束求解阶段的大范围的优化，使得整个符号执行过程较为快捷。KLEE工作在LLVM的架构上，以LLVM的中间语言bytecode作为输入，完成路径覆盖以及测试用例的生成。&lt;/p&gt;
 
