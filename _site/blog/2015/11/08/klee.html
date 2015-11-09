@@ -144,7 +144,7 @@ object    0: data: -2147483648
 
 <h4 id="section-4">测试一个简单的正则表达式匹配程序</h4>
 
-<p>源程序<a href="http://klee.github.io/resources/Regexp.c.html">http://klee.github.io/resources/Regexp.c.html</a><br />
+<p><a href="http://klee.github.io/resources/Regexp.c.html">源程序</a><br />
 该程序是一个简单的正则表达式匹配的程序，本次实验是通过使用该程序对字符串”hello”进行匹配，然后进行符号执行。</p>
 
 <p>同样进行编译执行之后，显示的结果如下：</p>
@@ -186,7 +186,7 @@ KLEE: done: generated tests = 15
 </code></pre>
 
 <p>从X开始移动，#是目的地。
-这次我们使用klee找出可能的通路。源代码<a href="http://pastebin.com/6wG5stht">http://pastebin.com/6wG5stht</a>
+这次我们使用klee找出可能的通路。<a href="http://pastebin.com/6wG5stht">源代码</a>
 首先标注输入，使用</p>
 
 <pre><code>klee_make_symbolic(program,ITERS,"program");

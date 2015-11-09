@@ -5,8 +5,8 @@
     <description>Thinking and Recording - </description>
     <link>http://haowai31.github.io/</link>
     <atom:link href="http://haowai31.github.io//page/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 09 Nov 2015 17:27:28 +0800</pubDate>
-    <lastBuildDate>Mon, 09 Nov 2015 17:27:28 +0800</lastBuildDate>
+    <pubDate>Mon, 09 Nov 2015 17:35:23 +0800</pubDate>
+    <lastBuildDate>Mon, 09 Nov 2015 17:35:23 +0800</lastBuildDate>
     <generator>haowai31</generator>
     
       <item>
@@ -88,7 +88,7 @@ object    0: data: -2147483648
 
 &lt;h4 id=&quot;section-4&quot;&gt;测试一个简单的正则表达式匹配程序&lt;/h4&gt;
 
-&lt;p&gt;源程序&lt;a href=&quot;http://klee.github.io/resources/Regexp.c.html&quot;&gt;http://klee.github.io/resources/Regexp.c.html&lt;/a&gt;&lt;br /&gt;
+&lt;p&gt;&lt;a href=&quot;http://klee.github.io/resources/Regexp.c.html&quot;&gt;源程序&lt;/a&gt;&lt;br /&gt;
 该程序是一个简单的正则表达式匹配的程序，本次实验是通过使用该程序对字符串”hello”进行匹配，然后进行符号执行。&lt;/p&gt;
 
 &lt;p&gt;同样进行编译执行之后，显示的结果如下：&lt;/p&gt;
@@ -130,7 +130,7 @@ KLEE: done: generated tests = 15
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;从X开始移动，#是目的地。
-这次我们使用klee找出可能的通路。源代码&lt;a href=&quot;http://pastebin.com/6wG5stht&quot;&gt;http://pastebin.com/6wG5stht&lt;/a&gt;
+这次我们使用klee找出可能的通路。&lt;a href=&quot;http://pastebin.com/6wG5stht&quot;&gt;源代码&lt;/a&gt;
 首先标注输入，使用&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;klee_make_symbolic(program,ITERS,&quot;program&quot;);
