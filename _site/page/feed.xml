@@ -5,9 +5,203 @@
     <description>Thinking and Recording - </description>
     <link>http://haowai31.github.io/</link>
     <atom:link href="http://haowai31.github.io//page/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 24 Jul 2015 19:04:35 +0800</pubDate>
-    <lastBuildDate>Fri, 24 Jul 2015 19:04:35 +0800</lastBuildDate>
+    <pubDate>Mon, 09 Nov 2015 10:50:45 +0800</pubDate>
+    <lastBuildDate>Mon, 09 Nov 2015 10:50:45 +0800</lastBuildDate>
     <generator>haowai31</generator>
+    
+      <item>
+        <title>KLEE平台搭建与实验</title>
+        <description>&lt;p&gt;由于项目的需要，研究了一段时间符号执行的平台KLEE，由于我的主要工作是在LLVM中间语言上的，而KLEE的工作也是建立在LLVM上的，所以KLEE就成为做实验的重要工具。&lt;/p&gt;
+
+&lt;h3 id=&quot;klee-&quot;&gt;KLEE 简单介绍&lt;/h3&gt;
+
+&lt;p&gt;KLEE是一个建立在EXE平台的基础上的一个符号执行平台，由斯坦福大学开发，使用STP作为约束求解器，依靠着在约束求解阶段的大范围的优化，使得整个符号执行过程较为快捷。KLEE工作在LLVM的架构上，以LLVM的中间语言bytecode作为输入，完成路径覆盖以及测试用例的生成。&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;实验环境&lt;/h3&gt;
+
+&lt;p&gt;Ubuntu 14.04&lt;br /&gt;
+内核版本：3.16&lt;/p&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;平台搭建&lt;/h3&gt;
+
+&lt;p&gt;使用Docker进行快速部署，KLEE官方有在维护一个Docker的镜像，该镜像在Ubuntu中搭建了LLVM和KLEE的平台。安装Docker的过程官网都有，本来Docker也推荐在Ubuntu中进行。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;docker pull klee/klee
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;把klee的镜像拉过来就好，然后就可以开始进行符号执行的测试了。
+其中记得挂载一个本系统的目录，这样可以方便的对本系统的文件进行编译和符号执行了。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;-v /本机目录:/在镜像中的目录
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后就可以开始实验了。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;实验过程&lt;/h3&gt;
+
+&lt;h4 id=&quot;section-3&quot;&gt;一个简单的程序&lt;/h4&gt;
+&lt;p&gt;对着一个有三条执行路径的程序进行符号执行程序如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;int get_sign(int x) {
+	if (x == 0)
+		return 0;
+
+  	if (x &amp;lt; 0)
+		return -1;
+	else 
+		return 1;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用命令：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;clang -emit-llvm -g -c 1get_sign.c -o test.bc
+klee test.bc 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以看到运行结果：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;E: output directory is &quot;/home/klee/exm/getsign/klee-out-0&quot;
+
+KLEE: done: total instructions = 30
+KLEE: done: completed paths = 3
+KLEE: done: generated tests = 3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后使用klee的test工具查看testcase：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ktest-tool --write-ints ./klee-last/test000001.ktest 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;结果为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ktest file : './klee-last/test000001.ktest'
+args       : ['test.bc']
+num objects: 1
+object    0: name: b'a'
+object    0: size: 4
+object    0: data: -2147483648
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接下来剩下两个testcase，a的取值分别为：16843009,0
+全部覆盖了程序的执行路径。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-4&quot;&gt;测试一个简单的正则表达式匹配程序&lt;/h4&gt;
+
+&lt;p&gt;源程序&lt;a href=&quot;http://klee.github.io/resources/Regexp.c.html&quot;&gt;http://klee.github.io/resources/Regexp.c.html&lt;/a&gt;&lt;br /&gt;
+该程序是一个简单的正则表达式匹配的程序，本次实验是通过使用该程序对字符串”hello”进行匹配，然后进行符号执行。&lt;/p&gt;
+
+&lt;p&gt;同样进行编译执行之后，显示的结果如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;KLEE: output directory is &quot;/home/klee/exm/regue/klee-out-1&quot;
+KLEE: ERROR: /home/klee/exm/regue/./2regue.c:22: memory error: out of bound pointer
+KLEE: NOTE: now ignoring this error at this location
+KLEE: ERROR: /home/klee/exm/regue/./2regue.c:24: memory error: out of bound pointer
+KLEE: NOTE: now ignoring this error at this location
+
+KLEE: done: total instructions = 4598603
+KLEE: done: completed paths = 7438
+KLEE: done: generated tests = 16
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;可以看到全部路径覆盖为7438条，而生成测试用例一共16组，值得注意的是，中间出现了两个ERROR，这个ERROR可能就是潜在的漏洞所在了。（但是这次并不是）
+这次其实是假设正则表达式的时候，字符串结尾必须是’/0’否则就会出错，这样在源程序中，使用语句klee_assume即可。
+然后发现这次已经没有之前的错误了，结果如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;KLEE: output directory is &quot;/home/klee/exm/regue/klee-out-3&quot;
+
+KLEE: done: total instructions = 4016680
+KLEE: done: completed paths = 5895
+KLEE: done: generated tests = 15
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;以上，就是该实验。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-5&quot;&gt;一个迷宫游戏&lt;/h4&gt;
+&lt;p&gt;这个迷宫游戏的地图如下所示：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;+-+---+---+
+|X|     |#|
+| | --+ | |
+| |   | | |
+| +-- | | |
+|     |   |
++-----+---+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;从X开始移动，#是目的地。
+这次我们使用klee找出可能的通路。源代码&lt;a href=&quot;http://pastebin.com/6wG5stht&quot;&gt;http://pastebin.com/6wG5stht&lt;/a&gt;
+首先标注输入，使用&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;klee_make_symbolic(program,ITERS,&quot;program&quot;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;代替&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;read(0,program,ITERS);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后将成功走出迷宫的输出标注出来：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;printf (&quot;You win!\n&quot;);
+klee_assert(0);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后在前面引入klee.h即可，同样进行编译和符号执行。
+把testcase中带err字样的找出来，使用类似命令：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ll klee_last/ |grep -A2 -B2 err
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后发现只有一个结果：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;test000135.ktest
+test000136.ktest
+test000137.assert.err
+test000137.ktest
+test000137.pc
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;查看结果发现解为：sddwddddsddw，将其输入源程序运行，发现竟然从”墙“中穿过，查看源代码发现原来这里有两面墙并没有判断，被klee找到了。&lt;/p&gt;
+
+&lt;p&gt;但是为什么没有正确的运行结果呢？正确的运行结果应该是唯一的。
+原来在程序中引发一个err可能有多种输出，但是在klee中只算作一种，如果想看到所有的解，则需要如下进行：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;klee -emit-all-errors test.bc
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样再次将testcase筛选出来就有四组结果了，四组结果分别是：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sddwddddsddw
+ssssddddwwaawwddddsddw
+sddwddddssssddwwww
+ssssddddwwaawwddddssssddwwww
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;其中最后一组是正确解，其他的都是穿墙解。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-6&quot;&gt;测试内核命令&lt;/h4&gt;
+&lt;p&gt;由于KLEE是以LLVM中间语言为对象进行的，那么只要是能够编译成LLVM的都能够使用KLEE进行符号执行。譬如Unix的一些内核命令，像chmod，cat，mkdir等等，从GNU上下载相应版本的coreutils进行测试即可。下面是klee发现的一些使得程序崩溃的输入，这些都可能是潜在的漏洞，版本号是coreutils 6.10。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;paste -d\\ abcdefghijklmnopqrstuvwxyz
+mkdir -Z a b
+mkfifo -Z a b
+seq -f %0 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;section-7&quot;&gt;未来的工作&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;广度：&lt;/strong&gt;未来可以继续测试像busybox，minix等比较简单的系统的系统工具。有将web编译成LLVM的前端就可以去测试web的程序。&lt;br /&gt;
+&lt;strong&gt;KLEE加强：&lt;/strong&gt;在运行Unix的工具的时候大概一个小时一个程序，但是涉及路径爆炸的问题，所需的时间会几何倍数向上增长，所以简化符号执行的流程，缩短时间是一个非常重要的研究方向。符号执行的并行化与提取程序摘要都是比较好的研究方向。&lt;br /&gt;
+&lt;strong&gt;漏洞定位：&lt;/strong&gt;在测试的过程中，其实会发生非常多的err，但并不是每个err都会引发漏洞，如何自动化的定位和测试这些漏洞，也是一个比较好的研究方向。&lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 08 Nov 2015 00:00:00 +0800</pubDate>
+        <link>http://haowai31.github.io//blog/2015/11/08/klee.html</link>
+        <guid isPermaLink="true">http://haowai31.github.io//blog/2015/11/08/klee.html</guid>
+        
+        <category>程序分析</category>
+        
+      </item>
     
       <item>
         <title>CLANG、LLVM实验（一）</title>

@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <meta name="description" content="Readings">
   <meta name="author" content="haowai31">
-  <meta name="keywords" content="Readings, Thinking and Recording, , haowai31">
-  <title>Readings</title>
-  <link rel="canonical" href="http://haowai31.github.io/">
+  <meta name="keywords" content="KLEE平台搭建与实验, Thinking and Recording, haowai31">
+  <title>KLEE平台搭建与实验 - Thinking and Recording</title>
+  <link rel="canonical" href="http://haowai31.github.io//blog/2015/11/08/klee.html">
   <link rel="icon" href="/res/img/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="/res/img/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/res/css/public.css">
@@ -56,21 +56,18 @@
 </div>
 
     <div class="main">
-    
-<div class="posts">
-  <section class="post">
     <header class="post-header">
-      <h1 class="post-title"><a href="/blog/2015/11/08/klee.html">KLEE平台搭建与实验</a></h1>
-      <p class="post-meta">
-        <i class="fa fa-calendar"></i>
-        2015年11月08日
-        <i class="space"></i>
-        <i class="fa fa-tags"></i>
-        <a class="post-category" href="/page/category.html#程序分析">程序分析</a>
-      </p>
-    </header>
-    <div class="post-main">
-      <p>由于项目的需要，研究了一段时间符号执行的平台KLEE，由于我的主要工作是在LLVM中间语言上的，而KLEE的工作也是建立在LLVM上的，所以KLEE就成为做实验的重要工具。</p>
+  <h1 class="post-title"><a href="/blog/2015/11/08/klee.html">KLEE平台搭建与实验</a></h2>
+  <p class="post-meta">
+    <i class="fa fa-calendar"></i>
+    2015年11月08日
+    <i class="space"></i>
+    <i class="fa fa-tags"></i>
+    <a class="post-category" href="/page/category.html#程序分析">程序分析</a>	
+  </p>
+</header>
+<div class="post-main">
+<p>由于项目的需要，研究了一段时间符号执行的平台KLEE，由于我的主要工作是在LLVM中间语言上的，而KLEE的工作也是建立在LLVM上的，所以KLEE就成为做实验的重要工具。</p>
 
 <h3 id="klee-">KLEE 简单介绍</h3>
 
@@ -254,143 +251,27 @@ seq -f %0 1
 <strong>漏洞定位：</strong>在测试的过程中，其实会发生非常多的err，但并不是每个err都会引发漏洞，如何自动化的定位和测试这些漏洞，也是一个比较好的研究方向。</p>
 
 
-      <div class="readall"><a href="/blog/2015/11/08/klee.html" id="post-readall">阅读全文&nbsp;<i class="fa fa-chevron-right"></i></a></div>
-    </div>
-  </section>
 </div>
-
-<div class="posts">
-  <section class="post">
-    <header class="post-header">
-      <h1 class="post-title"><a href="/blog/2015/07/24/llvm.html">CLANG、LLVM实验（一）</a></h1>
-      <p class="post-meta">
-        <i class="fa fa-calendar"></i>
-        2015年07月24日
-        <i class="space"></i>
-        <i class="fa fa-tags"></i>
-        <a class="post-category" href="/page/category.html#llvm">llvm</a>
-      </p>
-    </header>
-    <div class="post-main">
-      <p>由于项目需要，研究了一段时间的LLVM，现将已经做过的实验总结如下。<br />
-实验环境：
-Clang 3.2
-LLVM 3.2
-Ubuntu 14.04 64bit
-
-      <div class="readall"><a href="/blog/2015/07/24/llvm.html" id="post-readall">阅读全文&nbsp;<i class="fa fa-chevron-right"></i></a></div>
-    </div>
-  </section>
+<div class="share">
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+  </div>
+  <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":["qzone","tsina","weixin","sqq"],"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/res/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
 </div>
-
-<div class="posts">
-  <section class="post">
-    <header class="post-header">
-      <h1 class="post-title"><a href="/blog/2015/07/16/crest.html">crest的安装与使用</a></h1>
-      <p class="post-meta">
-        <i class="fa fa-calendar"></i>
-        2015年07月16日
-        <i class="space"></i>
-        <i class="fa fa-tags"></i>
-        <a class="post-category" href="/page/category.html#程序分析">程序分析</a>
-      </p>
-    </header>
-    <div class="post-main">
-      <p>crest是一款针对C语言的自动测试工具，支持深度优先（DFS）、控制流图（CFG）、一致随机（uniform random）和随机分支（random branch）四种搜索策略，使用符号执行技术，使用Yices作为约束求解器进行求解。</p>
-
-<p>github地址为：https://github.com/jburnim/crest</p>
-
-<p>下面是安装步骤和test的测试。</p>
-
-
-      <div class="readall"><a href="/blog/2015/07/16/crest.html" id="post-readall">阅读全文&nbsp;<i class="fa fa-chevron-right"></i></a></div>
-    </div>
-  </section>
-</div>
-
-<div class="posts">
-  <section class="post">
-    <header class="post-header">
-      <h1 class="post-title"><a href="/blog/2015/07/14/iossecurity1.html">iOS安全实验记录（一）：搭建环境与所需工具</a></h1>
-      <p class="post-meta">
-        <i class="fa fa-calendar"></i>
-        2015年07月14日
-        <i class="space"></i>
-        <i class="fa fa-tags"></i>
-        <a class="post-category" href="/page/category.html#ios安全">ios安全</a>
-      </p>
-    </header>
-    <div class="post-main">
-      <p>会持续更新iOS相关的安全实验，具体多少更不清楚，有好的主题就继续往下做，包括但不限于以下几个方面（这是已经做过和很感兴趣的）：</p>
-
-<ol>
-  <li>逆向某些App。</li>
-  <li>Hook与注入实验。</li>
-  <li>ROP攻击实验。</li>
-  <li>越狱开发。</li>
-</ol>
-
-<p>有兴趣探讨实验或提供实验主题请联系<strong>qinsky31@gmail.com</strong>。</p>
-
-
-      <div class="readall"><a href="/blog/2015/07/14/iossecurity1.html" id="post-readall">阅读全文&nbsp;<i class="fa fa-chevron-right"></i></a></div>
-    </div>
-  </section>
-</div>
-
-<div class="posts">
-  <section class="post">
-    <header class="post-header">
-      <h1 class="post-title"><a href="/blog/2015/07/13/usbmuxd.html">usbmuxd服务及应用</a></h1>
-      <p class="post-meta">
-        <i class="fa fa-calendar"></i>
-        2015年07月13日
-        <i class="space"></i>
-        <i class="fa fa-tags"></i>
-        <a class="post-category" href="/page/category.html#ios安全">ios安全</a>
-      </p>
-    </header>
-    <div class="post-main">
-      <p>今天在装iPhone上的LLDB+debugserver的时候，wifi突然抽风，非常慢，致使在主机进行lldb远程调试的时候过了好多分钟才能打开远程的app，等待的过程中我查了一下资料，发现也有一些人是遇到了这些情况，他们是通过usbmuxd服务进行解决的。迫不及待，实验了一番。</p>
-
-<p>后面查到这个usbmuxd服务，将USB通信抽象为TCP通信，也就是说实现了基于USB驱动之上的TCP连接，回想iTunes和Xcode应该也都用了这个技术，从而可以使用USB连接。</p>
-
-<p><a href="https://github.com/libimobiledevice/libimobiledevice">libimobiledevice</a>整合了usbmuxd服务，并在此基础上实现了一些特殊的功能，早期的越狱都是通过这个库进行操作的，同样也可以利用该库+ifuse进行远程访问控制手机等等。（而且是在非越狱的情况下）</p>
-
-<p>如果说上面这个库还很理论化的话，<a href="https://github.com/rsms/peertalk">peerTalk</a>，依然也是一个基于usbmuxd服务的项目，而且该项目封装的很好，非常容易参考，从而完成自己的开发。而且这中间只是用到的私有的协议，并没有用到私有API，应该还是可以上架的。</p>
-
-      <div class="readall"><a href="/blog/2015/07/13/usbmuxd.html" id="post-readall">阅读全文&nbsp;<i class="fa fa-chevron-right"></i></a></div>
-    </div>
-  </section>
-</div>
-
-<div class="posts">
-  <section class="post">
-    <header class="post-header">
-      <h1 class="post-title"><a href="/blog/2015/06/15/methods_of_protocols_analysis.html">安全协议读书笔记（二）：安全协议的三大理论分析方法</a></h1>
-      <p class="post-meta">
-        <i class="fa fa-calendar"></i>
-        2015年06月15日
-        <i class="space"></i>
-        <i class="fa fa-tags"></i>
-        <a class="post-category" href="/page/category.html#安全协议">安全协议</a>
-      </p>
-    </header>
-    <div class="post-main">
-      <p>安全协议的安全性分析包括理论分析、设计分析、检测分析和经验分析等多种方法。但是理论分析依靠严格的理论验证，使得安全协议可以获得比较高的安全性。
-
-      <div class="readall"><a href="/blog/2015/06/15/methods_of_protocols_analysis.html" id="post-readall">阅读全文&nbsp;<i class="fa fa-chevron-right"></i></a></div>
-    </div>
-  </section>
-</div>
-
 <div class="pagination">
-  
-  <span class="pagination-item newer"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;上一页</span>
-    
-  
-  <a class="pagination-item older" href="/page/2">下一页&nbsp;&nbsp;<i class="fa fa-arrow-right"></i></a>
-  
+
+<a class="pagination-item newer" href="/blog/2015/07/24/llvm.html"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;CLANG、LLVM实验（一）</a>
+
+
+<span class="pagination-item older">下一篇&nbsp;<i class="fa fa-chain-broken"></i></span>
+
+</div>
+<style>#ds-reset .ds-avatar, #ds-reset .ds-avatar img{border-radius:50%;}</style>
+<script type="text/javascript">var duoshuoQuery = {short_name:"11780753"};(function(){var ds = document.createElement('script');ds.type = 'text/javascript';ds.async = true;ds.src = '/res/js/embed.js';ds.charset = 'UTF-8';(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);})();</script>
+<div class="comments">
+  <div class="ds-thread" data-title="KLEE平台搭建与实验" data-thread-key="/blog/2015/11/08/klee" data-url="http://haowai31.github.io//blog/2015/11/08/klee.html"></div>
 </div>
     <footer>Copyright&nbsp;&copy;&nbsp;2015 <a href="http://haowai31.github.io/">Thinking and Recording</a><br/><i class="fa fa-cogs" style="color:blueviolet;">&nbsp;</i>Powered by <a href="http://jekyllrb.com/" target="_blank">Jekyll</a></footer>
     </div>
